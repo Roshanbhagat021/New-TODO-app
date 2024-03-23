@@ -1,0 +1,36 @@
+{
+  "task": [
+    {
+      "id": "f2e0",
+      "title": "Complete the freecodecamp frontend ",
+      "des": "Complete the freecodecamp frontend course within this month this will be very help full if this is all done show i can show the certificate to any one an",
+      "assignedTo": "Rahul",
+      "IsCompleted": true,
+      "DateAndTime": "23 March 2024 at 8:07 pm"
+    },
+    {
+      "id": "a67e",
+      "title": "Make a clone of assemble website ",
+      "des": "Make it with the help of react ,chakra ui and tailwind css and use frame motio as well",
+      "assignedTo": "Roshan",
+      "IsCompleted": false,
+      "DateAndTime": "23 March 2024 at 9:30 pm"
+    },
+    {
+      "id": "f5ce",
+      "title": "sdz",
+      "des": "dd",
+      "assignedTo": "Raj",
+      "IsCompleted": true,
+      "DateAndTime": "23 March 2024 at 11:23 pm"
+    },
+    {
+      "id": "eaa2",
+      "title": "d",
+      "des": "e",
+      "assignedTo": "Raj",
+      "IsCompleted": false,
+      "DateAndTime": "23 March 2024 at 11:25 pm"
+    }
+  ]
+}
