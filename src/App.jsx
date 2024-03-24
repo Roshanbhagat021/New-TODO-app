@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import AddTask from "./Components/AddTask";
 import TaskItem from "./Components/TaskItem";
 import axios from "axios";
+import Pagination from "./Components/Pagination";
 
 function App() {
   const {
@@ -16,32 +17,55 @@ function App() {
   } = useDisclosure();
 
   const [isTaskUpdated, setIsTaskUpdated] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  console.log("currentPage: ", currentPage);
+  const [totalPage, setTotalPage] = useState(1);
 
   const [tasks, setTasks] = useState([]);
 
   async function getDate() {
     try {
-      let res = await axios.get(`http://localhost:3000/task`);
-      setTasks(res.data);
+      let res = await axios.get(
+        `http://localhost:3000/task?_page=${currentPage}`
+      );
+
+      setTasks(res.data.data);
+      setTotalPage(Math.ceil(res.data.data.length / 10));
     } catch (error) {
       console.log(error);
     }
   }
-  async function getSortedDate() {
+  async function getSortedDate(e) {
+    // Assuming you want to update the state with sorted tasks
+    console.log(tasks);
     try {
-      let res = await axios(`http://localhost:3000/task`);
+      let res = await axios(
+        `http://localhost:3000/task?IsCompleted=${e.target.value}`
+      );
       setTasks(res.data);
     } catch (error) {
       console.log(error);
     }
   }
 
- 
+  async function filterbyDateAndTime(e) {
+    if (e.target.value == "desc") {
+      try {
+        let res = await axios.get(`http://localhost:3000/task?_sort=Date`);
+        setTasks(res.data);
+      } catch (error) {
+        console.log("error: ", error);
+      }
+    } else {
+      getDate();
+    }
+  }
 
   useEffect(() => {
     getDate();
-  }, [isTaskUpdated]);
+  }, [isTaskUpdated, currentPage]);
 
+  console.log(tasks);
   return (
     <>
       <div className="  w-[90vw]  max-w-[1200px] mt-8 m-auto sm:w-[80vw]">
@@ -58,18 +82,20 @@ function App() {
             <select
               name="SortByDate"
               className="h-10  bg-blue-200 outline-none rounded-[6px]"
+              onChange={(e) => filterbyDateAndTime(e)}
             >
               <option value="">Sort by Date and time</option>
               <option value="asc">Newest First</option>
               <option value="desc">Oldest first</option>
             </select>
             <select
+              onChange={(e) => getSortedDate(e)}
               name="CompleteStatus"
               className="h-10  bg-blue-200 outline-none rounded-[6px]"
             >
               <option value="">Filter by Complete Status</option>
-              <option value="asc">Completed</option>
-              <option value="desc">Pending</option>
+              <option value="true">Completed</option>
+              <option value="false">Pending</option>
             </select>
           </div>
 
@@ -89,9 +115,21 @@ function App() {
           setIsTaskUpdated={setIsTaskUpdated}
         />
         {tasks.map((task) => {
-          return <TaskItem key={task.id} {...task} setIsTaskUpdated={setIsTaskUpdated} />;
+          return (
+            <TaskItem
+              key={task.id}
+              {...task}
+              setIsTaskUpdated={setIsTaskUpdated}
+            />
+          );
         })}
       </div>
+      <Pagination
+        setTotalPage={setTotalPage}
+        totalPage={totalPage}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+      />
     </>
   );
 }

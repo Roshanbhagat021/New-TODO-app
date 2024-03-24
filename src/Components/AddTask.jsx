@@ -15,8 +15,9 @@ const initialState = {
   title: "",
   des: "",
   assignedTo: "",
-  IsCompleted: false,
-  DateAndTime: "",
+  IsCompleted: "false",
+  Date: "",
+  Time:""
 };
 
 const AddTask = ({ onClose, isOpen, setIsTaskUpdated }) => {
@@ -26,22 +27,30 @@ const AddTask = ({ onClose, isOpen, setIsTaskUpdated }) => {
 
   function handelinputChange(e) {
     const options = {
-      hour: "numeric",
-      minute: "numeric",
-      hour12: true,
       day: "numeric",
       month: "long",
       year: "numeric",
+    };
+
+    const options2 = {
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
       timeZone: "Asia/Kolkata",
     };
 
     const currentDate = new Date();
+    const currentTime = new Date();
     const formattedDate = new Intl.DateTimeFormat("en-IN", options).format(
       currentDate
     );
 
+    const formattedTime = new Intl.DateTimeFormat("en-IN", options2).format(
+      currentTime
+      );
+
     const { name, value } = e.target;
-    setTaskInput({ ...taskInput, [name]: value, DateAndTime: formattedDate });
+    setTaskInput({ ...taskInput, [name]: value, Date: formattedDate ,Time:formattedTime});
   }
 
   async function handelSubmit(e) {

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../index.css";
 import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
-import {  useDisclosure, useToast } from "@chakra-ui/react";
+import { useDisclosure, useToast } from "@chakra-ui/react";
 import axios from "axios";
 import EditTask from "./EditTask";
 
@@ -11,7 +11,8 @@ function TaskItem({
   des,
   assignedTo,
   IsCompleted,
-  DateAndTime,
+  Date,
+  Time,
   setIsTaskUpdated,
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -34,7 +35,9 @@ function TaskItem({
   }
 
   async function toggleTaskCompleted() {
-    const patchData = { IsCompleted: !IsCompleted };
+    const patchData = {
+      IsCompleted: IsCompleted === "true" ? "false" : "true",
+    };
     try {
       let req = await axios.patch(
         `http://localhost:3000/task/${id}`,
@@ -57,7 +60,9 @@ function TaskItem({
             </h1>
           </div>
           <div className="text-sm italic text-gray-400">
-            <p>Created on {DateAndTime}</p>
+            <p>
+              Created on {Date} at {Time}
+            </p>
             <p>
               Assigned to <span className=" font-semibold">{assignedTo}</span>
             </p>
@@ -72,7 +77,7 @@ function TaskItem({
         {/* Mark completed , Edit and Delete Section */}
         <div
           className={`flex justify-between items-center ${
-            IsCompleted ? "bg-green-300" : "bg-red-300"
+            IsCompleted == "true" ? "bg-green-300" : "bg-red-300"
           }  px-2 py-1`}
         >
           {/* isCompleted */}
@@ -83,7 +88,7 @@ function TaskItem({
                 onClick={toggleTaskCompleted}
                 className="scale-150 "
               />{" "}
-              {IsCompleted ? "Mark Pending" : "Mark completed"}
+              {IsCompleted == "true" ? "Mark Pending" : "Mark completed"}
             </label>
           </div>
 
@@ -101,7 +106,12 @@ function TaskItem({
           </div>
         </div>
       </div>
-      <EditTask onClose={onClose} isOpen={isOpen} id={id}  setIsTaskUpdated={setIsTaskUpdated} />
+      <EditTask
+        onClose={onClose}
+        isOpen={isOpen}
+        id={id}
+        setIsTaskUpdated={setIsTaskUpdated}
+      />
     </>
   );
 }
